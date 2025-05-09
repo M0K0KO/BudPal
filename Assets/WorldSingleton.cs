@@ -211,6 +211,9 @@ public class WorldSingleton : MonoBehaviour
         LoadFarmData("KTH");
 
         UIController.instance.mainPanel.GetComponent<CanvasGroup>().blocksRaycasts = true;
+        
+        UIController.instance.visitButton.SetActive(false);
+        UIController.instance.returnButton.SetActive(true);
     }
     
     public void SwitchSceneToUserScene()
@@ -221,6 +224,9 @@ public class WorldSingleton : MonoBehaviour
         Farm.instance.ClearFarm();
         
         LoadFarmData("KHU");
+
+        UIController.instance.visitButton.SetActive(true);
+        UIController.instance.returnButton.SetActive(false);
     }
 
     public async void LoadFarmData(string userId)

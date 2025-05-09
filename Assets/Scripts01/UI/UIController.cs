@@ -44,8 +44,10 @@ public class UIController : MonoBehaviour
     public Sprite fourthLevelItem;
 
     public GameObject mainShopPanel;
-
     public GameObject loadingScene;
+
+    public GameObject visitButton;
+    public GameObject returnButton;
 
 
     private void Awake()
