@@ -1,9 +1,12 @@
+using System;
 using DG.Tweening;
 using TMPro;
 using UnityEngine;
 
 public class UIController : MonoBehaviour
 {
+    public static UIController instance;
+    
     public Canvas canvas;
     
     public SimpleRegistrationManager registrationManager;
@@ -25,6 +28,8 @@ public class UIController : MonoBehaviour
     public GameObject mainPanel;
 
     public GameObject plantInfoPanel;
+    public float prevOrthoSize;
+    public Vector3 prevCamPos;
 
     public GameObject shopPanel;
 
@@ -32,6 +37,10 @@ public class UIController : MonoBehaviour
 
     private void Awake()
     {
+        if (instance == null) instance = this;
+        else if (instance != this) Destroy(gameObject);
+        
+        plantInfoPanel.SetActive(false);
         canvas = GetComponent<Canvas>();
         loginPanel.SetActive(true);
         mainPanel.SetActive(false);
@@ -124,6 +133,32 @@ public class UIController : MonoBehaviour
             shopPanel.SetActive(false);
             plantInfoPanel.GetComponent<CanvasGroup>().blocksRaycasts = true;
         });
+    }
+
+    public void OnPlantInfoExitClick()
+    {
+        Camera cam = Camera.main;
+        try
+        {
+            cam.DOOrthoSize(prevOrthoSize, 0.5f)
+                .SetEase(Ease.OutCubic)
+                .OnComplete(() => Debug.Log("Camera zoom reset completed"));
+                
+            cam.transform.DOMove(prevCamPos, 0.5f)
+                .SetEase(Ease.OutCubic)
+                .OnComplete(() => Debug.Log("Camera move reset completed"));
+            
+            if (WorldSingleton.instance != null && WorldSingleton.instance.plantDetailWindow != null)
+            {
+                WorldSingleton.instance.plantDetailWindow.SetActive(false);
+            }
+            
+            Debug.Log("Detail view forcibly reset");
+        }
+        catch (Exception e)
+        {
+            Debug.LogError("Force reset error: " + e.Message);
+        }
     }
 
 

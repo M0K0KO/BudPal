@@ -9,8 +9,7 @@ public class PlantOnHover : MonoBehaviour
     private bool isDetailViewActive = false;
 
     private Camera camera;
-    private Vector3 prevPos;
-    private float prevOrthoSize;
+    
     
     private void Awake()
     {
@@ -20,8 +19,11 @@ public class PlantOnHover : MonoBehaviour
 
     private void Update()
     {
+        bool wasHovering = isHovering;
+        isHovering = CheckIfMouseIsHovering();
+    
         // 마우스가 화면 내에 있고, 호버링 중이며, 상세 뷰가 비활성화 상태일 때만 클릭 처리
-        if (Input.GetMouseButtonDown(0) && isHovering && !isDetailViewActive && IsMouseWithinScreen())
+        if (Input.GetMouseButtonDown(0) && isHovering && !UIController.instance.plantInfoPanel.activeInHierarchy && IsMouseWithinScreen())
         {
             isDetailViewActive = true;
             
@@ -33,8 +35,8 @@ public class PlantOnHover : MonoBehaviour
             }
             
             // 현재 카메라 상태 저장
-            prevPos = camera.transform.position;
-            prevOrthoSize = camera.orthographicSize;
+            UIController.instance.prevCamPos = camera.transform.position;
+            UIController.instance.prevOrthoSize = camera.orthographicSize;
             
             // 안전한 트윈 애니메이션 실행
             try
@@ -46,7 +48,7 @@ public class PlantOnHover : MonoBehaviour
                 
                 // 카메라 이동 애니메이션
                 Vector3 targetPos = new Vector3(transform.position.x - 5, transform.position.y + 5, transform.position.z - 5);
-                Vector3 offSet = new Vector3(0.6f, 1.3f, -1.3f);
+                Vector3 offSet = new Vector3(0.2f, 1.3f, -1.2f);
                 targetPos += offSet;
                 
                 camera.transform.DOMove(targetPos, 0.5f)
@@ -103,11 +105,11 @@ public class PlantOnHover : MonoBehaviour
             }
             
             // 카메라 원래 상태로 복원
-            camera.DOOrthoSize(prevOrthoSize, 0.5f)
+            camera.DOOrthoSize(UIController.instance.prevOrthoSize, 0.5f)
                 .SetEase(Ease.OutCubic)
                 .OnComplete(() => Debug.Log("Camera zoom reset completed"));
                 
-            camera.transform.DOMove(prevPos, 0.5f)
+            camera.transform.DOMove(UIController.instance.prevCamPos, 0.5f)
                 .SetEase(Ease.OutCubic)
                 .OnComplete(() => Debug.Log("Camera move reset completed"));
 
@@ -141,8 +143,13 @@ public class PlantOnHover : MonoBehaviour
         try
         {
             // 카메라 설정 즉시 복원
-            camera.orthographicSize = prevOrthoSize;
-            camera.transform.position = prevPos;
+            camera.DOOrthoSize(UIController.instance.prevOrthoSize, 0.5f)
+                .SetEase(Ease.OutCubic)
+                .OnComplete(() => Debug.Log("Camera zoom reset completed"));
+                
+            camera.transform.DOMove(UIController.instance.prevCamPos, 0.5f)
+                .SetEase(Ease.OutCubic)
+                .OnComplete(() => Debug.Log("Camera move reset completed"));
             
             // UI 상태 초기화
             if (WorldSingleton.instance != null && WorldSingleton.instance.plantDetailWindow != null)
@@ -152,13 +159,6 @@ public class PlantOnHover : MonoBehaviour
             
             // 상태 변수 초기화
             isDetailViewActive = false;
-            
-            // 모든 DOTween 애니메이션 중지 (이 오브젝트와 관련된 것만)
-            DOTween.Kill(camera);
-            if (WorldSingleton.instance != null && WorldSingleton.instance.plantDetailWindow != null)
-            {
-                DOTween.Kill(WorldSingleton.instance.plantDetailWindow.GetComponent<RectTransform>());
-            }
             
             Debug.Log("Detail view forcibly reset");
         }
@@ -183,26 +183,29 @@ public class PlantOnHover : MonoBehaviour
         return isWithin;
     }
 
-    private void OnMouseEnter()
+    private bool CheckIfMouseIsHovering()
     {
-        // 마우스가 화면 내에 있을 때만 호버링 처리
-        if (IsMouseWithinScreen())
-        {
-            isHovering = true;
-            if (plant != null && plant.plantController != null && plant.plantController.currentOutline != null)
-            {
-                plant.plantController.currentOutline.enabled = true;
-            }
-        }
-    }
+        // 마우스가 화면 내에 있는지 확인
+        if (!IsMouseWithinScreen())
+            return false;
     
-    private void OnMouseExit()
-    {
-        isHovering = false;
-        if (plant != null && plant.plantController != null && plant.plantController.currentOutline != null)
+        // 메인 카메라 확인
+        Camera mainCamera = Camera.main;
+        if (mainCamera == null)
+            return false;
+        
+        Ray ray = mainCamera.ScreenPointToRay(Input.mousePosition);
+        RaycastHit hit;
+    
+        // 레이캐스트를 사용하여 오브젝트와 충돌 체크
+        float maxDistance = 100000f; // 필요에 따라 조정
+    
+        if (Physics.Raycast(ray, out hit, maxDistance))
         {
-            plant.plantController.currentOutline.enabled = false;
+            return hit.transform == this.transform;
         }
+    
+        return false;
     }
     
     // 가능한 에러 확인을 위한 OnDisable
@@ -212,6 +215,26 @@ public class PlantOnHover : MonoBehaviour
         if (isDetailViewActive)
         {
             ResetDetailView();
+        }
+    }
+    
+    private void OnMouseEnter()
+    {
+        // 마우스가 화면 내에 있을 때만 호버링 처리
+        if (IsMouseWithinScreen())
+        {
+            if (plant != null && plant.plantController != null && plant.plantController.currentOutline != null)
+            {
+                plant.plantController.currentOutline.enabled = true;
+            }
+        }
+    }
+
+    private void OnMouseExit()
+    {
+        if (plant != null && plant.plantController != null && plant.plantController.currentOutline != null)
+        {
+            plant.plantController.currentOutline.enabled = false;
         }
     }
 }

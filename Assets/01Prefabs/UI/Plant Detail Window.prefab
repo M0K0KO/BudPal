@@ -848,6 +848,7 @@ GameObject:
   - component: {fileID: 80858069731285038}
   - component: {fileID: 2464437760384526631}
   - component: {fileID: 2813661919675529449}
+  - component: {fileID: 1637432718112399222}
   m_Layer: 5
   m_Name: Plant Detail Window
   m_TagString: Untagged
@@ -901,6 +902,23 @@ CanvasGroup:
   m_Interactable: 1
   m_BlocksRaycasts: 1
   m_IgnoreParentGroups: 0
+--- !u!114 &1637432718112399222
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3122908540476466417}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cf8ce2a005a00ce42abbc383d259482a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  plantName: {fileID: 2409778371374717618}
+  plantRank: {fileID: 5784466249313263790}
+  plantStatus: {fileID: 5564779574169020446}
+  plantDescription: {fileID: 8318652971964776881}
+  plantImage: {fileID: 4248449500070328697}
 --- !u!1 &3231310225859073324
 GameObject:
   m_ObjectHideFlags: 0
