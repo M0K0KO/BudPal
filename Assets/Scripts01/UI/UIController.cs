@@ -45,8 +45,7 @@ public class UIController : MonoBehaviour
 
     public GameObject mainShopPanel;
 
-    public GameObject visitButton;
-    public GameObject returnButton;
+    public GameObject loadingScene;
 
 
     private void Awake()
@@ -64,11 +63,20 @@ public class UIController : MonoBehaviour
         sseReceiver = FindFirstObjectByType<SSEObjectReceiver>();
     }
 
-
+    private void SetInActiveLoadingScene()
+    {
+        loadingScene.GetComponent<CanvasGroup>().DOFade(0, 0.4f).OnComplete(()=>loadingScene.SetActive(false));
+    }
+    
     public async void OnLoginClick()
     {
         audioSource.PlayOneShot(buttonSound);
 
+        loadingScene.SetActive(true);
+        loadingScene.GetComponent<CanvasGroup>().DOFade(1, 0.4f);
+        Invoke("SetInActiveLoadingScene", 4.5f);
+
+        
         UserAuthResponseData response = await sseReceiver.LoginUserAsync(loginUsernameInput.text, password: loginPasswordInput.text);
 
         if (response != null)
@@ -181,8 +189,6 @@ public class UIController : MonoBehaviour
             {
                 WorldSingleton.instance.plantDetailWindow.SetActive(false);
             }
-
-            GetComponent<CanvasGroup>().blocksRaycasts = true;
             
             Debug.Log("Detail view forcibly reset");
         }
@@ -194,8 +200,6 @@ public class UIController : MonoBehaviour
 
     public void OnVisitClick()
     {
-        Debug.Log("ONVISITCLICK");
-        
         audioSource.PlayOneShot(buttonSound);
         mainPanel.GetComponent<CanvasGroup>().blocksRaycasts = false;
         visitPanel.GetComponent<CanvasGroup>().alpha = 0f;

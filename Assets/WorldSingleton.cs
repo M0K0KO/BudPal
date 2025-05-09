@@ -207,11 +207,10 @@ public class WorldSingleton : MonoBehaviour
         Farm.instance.ClearFarm();
         
         UIController.instance.visitPanel.SetActive(false);
-        UIController.instance.mainPanel.GetComponent<CanvasGroup>().blocksRaycasts = true;
-        UIController.instance.returnButton.SetActive(true);
-        UIController.instance.visitButton.SetActive(false);
         
         LoadFarmData("KTH");
+
+        UIController.instance.mainPanel.GetComponent<CanvasGroup>().blocksRaycasts = true;
     }
     
     public void SwitchSceneToUserScene()
@@ -220,10 +219,6 @@ public class WorldSingleton : MonoBehaviour
         userScene.SetActive(true);
         friendScene.SetActive(false);
         Farm.instance.ClearFarm();
-        
-        UIController.instance.mainPanel.GetComponent<CanvasGroup>().blocksRaycasts = true;
-        UIController.instance.returnButton.SetActive(false);
-        UIController.instance.visitButton.SetActive(true);
         
         LoadFarmData("KHU");
     }

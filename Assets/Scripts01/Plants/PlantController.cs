@@ -51,7 +51,7 @@ public class PlantController : MonoBehaviour
         PlantType currentType = plant.plantInfo.plantType;
         PlantLevel currentLevel = plant.plantInfo.plantLevel;
 
-        MeshRenderer targetMesh = transform.Find("Meshes").Find(currentType + "_" + currentLevel).GetComponent<MeshRenderer>();
+        MeshRenderer targetMesh = transform.Find(currentType + "_" + currentLevel).GetComponent<MeshRenderer>();
         currentActiveRenderer = targetMesh;
         currentOutline = targetMesh.GetComponent<Outline>();
         targetMesh.enabled = true;
@@ -64,7 +64,7 @@ public class PlantController : MonoBehaviour
         PlantType currentType = plant.plantInfo.plantType;
         PlantLevel currentLevel = plant.plantInfo.plantLevel;
 
-        MeshRenderer targetMesh = transform.Find("Meshes").Find(currentType + "_" + currentLevel).GetComponent<MeshRenderer>();
+        MeshRenderer targetMesh = transform.Find(currentType + "_" + currentLevel).GetComponent<MeshRenderer>();
         currentActiveRenderer = targetMesh;
         currentOutline = targetMesh.GetComponent<Outline>();
         targetMesh.enabled = true;
@@ -83,7 +83,7 @@ public class PlantController : MonoBehaviour
     
     public void DisableAllActiveMeshRenderers()
     {
-        MeshRenderer[] childRenderers = transform.Find("Meshes").GetComponentsInChildren<MeshRenderer>(true);
+        MeshRenderer[] childRenderers = GetComponentsInChildren<MeshRenderer>(true);
         
         foreach (MeshRenderer renderer in childRenderers)
         { 
@@ -99,23 +99,14 @@ public class PlantController : MonoBehaviour
 
     public void ChangeLevel(PlantLevel plantLevel)
     {
-        MeshRenderer deadIcon = transform.Find("PlantDeadIcon").GetComponentInChildren<MeshRenderer>();
-        MeshRenderer readyIcon = transform.Find("PlantReadyIcon").GetComponentInChildren<MeshRenderer>();
-        
-        if (plantLevel == PlantLevel.Lv4)
+        if (plantLevel == PlantLevel.Lv4 && plant.plantInfo.plantLevel != PlantLevel.Lv4)
         {
-            deadIcon.enabled = true;
-            readyIcon.enabled = false;
+            Debug.Log("이새끼 아픔;;");
         }
-        else if (plantLevel == PlantLevel.Lv3)
+
+        if (plantLevel == PlantLevel.Lv3 && plant.plantInfo.plantLevel != PlantLevel.Lv3)
         {
-            deadIcon.enabled = false;
-            readyIcon.enabled = true;
-        }
-        else
-        {
-            deadIcon.enabled = false;
-            readyIcon.enabled = false;
+            Debug.Log("다 컸다!!");
         }
         
         PlantLevel prevLevel = plant.plantInfo.plantLevel;
