@@ -228,12 +228,6 @@ public class WorldSingleton : MonoBehaviour
         sseReceiver.UpdateDetectionInfoInUnity(response.detection_data);
     }
 
-    public float baseRequiredExp = 10;
-    public float requiredExp = 10;
-    public float expGrowthRate = 1.3f;
-    public float userExp = 0f;
-    public int userLv = 0;
-
     public void levelUp()
     {
         requiredExp *= 1.3f;
