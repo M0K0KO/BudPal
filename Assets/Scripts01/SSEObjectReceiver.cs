@@ -72,12 +72,21 @@ public class SSEObjectReceiver : MonoBehaviour
     [Header("SSE Connection Settings")]
     public float reconnectDelaySeconds = 5.0f;
     [Tooltip("This ID is used for establishing the SSE connection. Set it after successful login or from game settings/PlayerPrefs.")]
-    public string sseTargetUserId = "defaultUser"; // SSE ���� ��� ����� ID
+    public string sseTargetUserId = "KTH"; // SSE ���� ��� ����� ID
 
 
     private HttpClient httpClient;
     private CancellationTokenSource sseCancellationTokenSource;
     private bool isTryingToConnectSse = false;
+
+    private List<UserAuthResponseData> allUsers;
+    private UserDataResponse userData;
+
+    private void Awake()
+    {
+        allUsers = WorldSingleton.instance.allUsers;
+        userData = WorldSingleton.instance.userData;
+    }
 
     void Start()
     {
@@ -96,17 +105,15 @@ public class SSEObjectReceiver : MonoBehaviour
             Debug.Log($"[SSEObjectReceiver] Initializing SSE connection for pre-set user: {this.sseTargetUserId}");
             StartSseConnectionForCurrentUser();
         }
-        else
-        {
-            Debug.LogWarning($"[SSEObjectReceiver] sseTargetUserId ('{this.sseTargetUserId}') is default or empty at Start. " +
-                             "SSE connection will not be initiated automatically. " +
-                             "Call LoginUserAsync or set sseTargetUserId and call StartSseConnectionForCurrentUser manually.");
-        }
     }
 
     public void StartSseConnectionForCurrentUser()
     {
-        
+        if (string.IsNullOrEmpty(this.sseTargetUserId) || this.sseTargetUserId == "defaultUser")
+        {
+            Debug.LogError($"[SSEObjectReceiver] Cannot start SSE: sseTargetUserId is not set to a specific user ('{this.sseTargetUserId}'). Please login or set it appropriately.");
+            return;
+        }
         if (httpClient == null)
         {
             Debug.LogError("[SSEObjectReceiver] HttpClient not initialized. Cannot start SSE connection.");
@@ -254,7 +261,7 @@ public class SSEObjectReceiver : MonoBehaviour
                 }
 
                 Debug.Log($"[SSEObjectReceiver] Received combined data for '{userIdToRequestDataFor}'. Deserializing... (JSON sample: {jsonResponse.Substring(0, Math.Min(jsonResponse.Length, 200))}...)");
-                UserDataResponse userData = JsonConvert.DeserializeObject<UserDataResponse>(jsonResponse);
+                userData = JsonConvert.DeserializeObject<UserDataResponse>(jsonResponse);
 
                 if (userData != null)
                 {
@@ -426,7 +433,7 @@ public class SSEObjectReceiver : MonoBehaviour
 
         try
         {
-            using (var cts = new CancellationTokenSource(TimeSpan.FromSeconds(60)))
+            using (var cts = new CancellationTokenSource(TimeSpan.FromSeconds(60))) 
             {
                 HttpResponseMessage response = await httpClient.GetAsync(endpointUrl, cts.Token);
                 string jsonResponse = await response.Content.ReadAsStringAsync();
@@ -437,10 +444,11 @@ public class SSEObjectReceiver : MonoBehaviour
                     return null;
                 }
 
-                List<UserAuthResponseData> allUsers = JsonConvert.DeserializeObject<List<UserAuthResponseData>>(jsonResponse);
+                allUsers = JsonConvert.DeserializeObject<List<UserAuthResponseData>>(jsonResponse);
                 if (allUsers != null) Debug.Log($"[SSEObjectReceiver] Successfully fetched {allUsers.Count} users.");
                 else Debug.LogWarning($"[SSEObjectReceiver] Deserialized list of all users is null. JSON: {jsonResponse}");
                 return allUsers;
+                
             }
         }
         catch (Exception ex) { HandleRequestException("GetAllUsersAsync", "N/A (all users)", endpointUrl, ex); return null; }
@@ -472,49 +480,8 @@ public class SSEObjectReceiver : MonoBehaviour
     {
         // Example: Log the received data. Replace with your actual game logic.
         // This logging can be very verbose if updates are frequent.
-        //Debug.Log($"[SSEObjectReceiver] Processing {detectionData.Count} sectors in UpdateDetectionInfoInUnity.");
+        // Debug.Log($"[SSEObjectReceiver] Processing {detectionData.Count} sectors in UpdateDetectionInfoInUnity.");
 
-        if (Farm.instance.farmWidth == 0 || Farm.instance.farmBreadth == 0 || !Farm.instance.isInitialized)
-        {
-            // 그리드 크기 계산
-            int maxRow = -1;
-            int maxCol = -1;
-        
-            // 모든 키를 순회하며 가장 큰 행과 열 값을 찾음
-            foreach (var sectorKey in detectionData.Keys)
-            {
-                // 키는 "row-col" 형식
-                string[] parts = sectorKey.Split('-');
-                if (parts.Length == 2)
-                {
-                    if (int.TryParse(parts[0], out int row) && int.TryParse(parts[1], out int col))
-                    {
-                        maxRow = Math.Max(maxRow, row);
-                        maxCol = Math.Max(maxCol, col);
-                    }
-                }
-            }
-        
-            // 인덱스는 0부터 시작하므로 실제 크기는 +1 해줌
-            int gridRows = maxRow + 1;
-            int gridCols = maxCol + 1;
-        
-            // 디버그 로그
-            Debug.Log($"[SSEObjectReceiver] Detected grid size: {gridRows}x{gridCols}");
-        
-            // Farm 초기화 (farmWidth와 farmBreadth 설정)
-            // cellSize가 이미 설정되어 있다고 가정
-            float cellSize = Farm.instance.cellSize;
-            Farm.instance.farmWidth = gridRows * cellSize;
-            Farm.instance.farmBreadth = gridCols * cellSize;
-        
-            // Farm 초기화 메서드 호출 (배열 생성 등)
-            Farm.instance.InitializeFarm();
-            Farm.instance.plantsManager.MakePlantsList();
-        
-            Debug.Log($"[SSEObjectReceiver] Farm initialized with width={Farm.instance.farmWidth}, breadth={Farm.instance.farmBreadth}");
-        }
-        
         foreach (var sectorEntry in detectionData)
         {
             string sectorKey = sectorEntry.Key; // e.g., "0-0", "1-2"
@@ -526,6 +493,7 @@ public class SSEObjectReceiver : MonoBehaviour
                 // Debug.Log($"Sector [{sectorKey}]: Found {objectsInSector.Count} object(s).");
                 foreach (NewDetectedObjectInfo objInfo in objectsInSector)
                 {
+                    /**
                     if (objInfo == null) continue;
                     else
                     {
@@ -556,15 +524,27 @@ public class SSEObjectReceiver : MonoBehaviour
                         type,
                         lv
                     );
-                    
+
                     // This loop seems to be part of a specific game logic,
                     // likely iterating over the entire farm grid after each object update,
                     // which might be inefficient if not intended.
                     // Consider if this should be outside the objectsInSector loop or after all sectors are processed.
-
+                    for (int x = 0; x < (int)(Farm.instance.farmWidth / Farm.instance.cellSize); x++)
+                    {
+                        for (int z = 0; z < (int)(Farm.instance.farmBreadth / Farm.instance.cellSize); z++)
+                        {
+                            bool isVisited = Farm.instance.plantsManager.visitedPlant[x, z];
+                            bool plantExistence = (Farm.instance.plantsManager.plantList[x, z] == null) ? false : true;
+                            if (!isVisited && plantExistence)
+                            {
+                                Farm.instance.plantsManager.HarvestPlant(x, z);
+                            }
+                        }
+                    }
+                    **/
                     // Access objInfo.sector_row, objInfo.sector_col, objInfo.Level, objInfo.ObjectType
                     // Example:
-                    //Debug.Log($"  - Row: {objInfo.sector_row}, Col: {objInfo.sector_col}, Lv: {objInfo.Level}, Type: {objInfo.ObjectType}");
+                    Debug.Log($"  - Row: {objInfo.sector_row}, Col: {objInfo.sector_col}, Lv: {objInfo.Level}, Type: {objInfo.ObjectType}");
                     //
                     // YOUR UNITY UPDATE LOGIC GOES HERE:
                     // - Find GameObjects representing these sectors or objects.
@@ -572,25 +552,6 @@ public class SSEObjectReceiver : MonoBehaviour
                     // - Trigger game events.
                     // - Visualize bounding boxes (if you were to add coordinates back to server response).
                     //
-                }
-                
-                for (int x = 0; x < (int)(Farm.instance.farmWidth / Farm.instance.cellSize); x++)
-                {
-                    for (int z = 0; z < (int)(Farm.instance.farmBreadth / Farm.instance.cellSize); z++)
-                    {
-                        bool isVisited = Farm.instance.plantsManager.visitedPlant[x, z];
-                        bool plantExistence = (Farm.instance.plantsManager.plantList[x, z] == null) ? false : true;
-                        if (!isVisited && plantExistence)
-                        {
-                            Farm.instance.plantsManager.HarvestPlant(x, z);
-                        }
-                    }
-                }
-
-                if (Farm.instance.isInitialized == false)
-                {
-                    Farm.instance.InitializeFarm();
-                    Farm.instance.isInitialized = true;
                 }
             }
             // else: This sector has no detected objects. You might want to clear previous visuals for this sector.

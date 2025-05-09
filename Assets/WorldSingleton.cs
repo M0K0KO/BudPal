@@ -13,6 +13,9 @@ public class WorldSingleton : MonoBehaviour
     public GameObject plantDetailWindow;
     public List<Plant> harvestedPlants;
 
+    public List<UserAuthResponseData> allUsers;
+    public UserDataResponse userData;
+    
     public Sprite v1_cabbage;
     public Sprite v2_cabbage;
     public Sprite v3_cabbage;
