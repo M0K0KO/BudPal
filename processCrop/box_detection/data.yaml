@@ -1,0 +1,6 @@
+path: ../box_detection
+train: images/train  # 'path'에 지정된 폴더를 기준으로 한 상대 경로
+val: images/val    # 'path'에 지정된 폴더를 기준으로 한 상대 경로
+
+nc: 12  # 클래스 개수 (여기서는 'box' 하나)
+names: ['v1_cabbage', 'v2_cabbage', 'v3_cabbage', 'v4_cabbage', 'v1_eggplant', 'v2_eggplant', 'v3_eggplant', 'v4_eggplant', 'v1_tomato', 'v2_tomato', 'v3_tomato', 'v4_tomato']  # 클래스 이름 목록

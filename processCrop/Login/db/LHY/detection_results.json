@@ -1,0 +1,91 @@
+{
+    "0-0": [
+        {
+            "sector_row": 0,
+            "sector_col": 0,
+            "Lv": "v1",
+            "type": "tomato"
+        },
+        {
+            "sector_row": 0,
+            "sector_col": 0,
+            "Lv": "v1",
+            "type": "tomato"
+        }
+    ],
+    "0-1": [
+        {
+            "sector_row": 0,
+            "sector_col": 1,
+            "Lv": "v3",
+            "type": "tomato"
+        },
+        {
+            "sector_row": 0,
+            "sector_col": 1,
+            "Lv": "v2",
+            "type": "tomato"
+        }
+    ],
+    "0-2": [
+        {
+            "sector_row": 0,
+            "sector_col": 2,
+            "Lv": "v3",
+            "type": "cabbage"
+        }
+    ],
+    "1-0": [
+        {
+            "sector_row": 1,
+            "sector_col": 0,
+            "Lv": "v3",
+            "type": "eggplant"
+        },
+        {
+            "sector_row": 1,
+            "sector_col": 0,
+            "Lv": "v4",
+            "type": "eggplant"
+        }
+    ],
+    "1-1": [],
+    "1-2": [
+        {
+            "sector_row": 1,
+            "sector_col": 2,
+            "Lv": "v1",
+            "type": "cabbage"
+        }
+    ],
+    "2-0": [
+        {
+            "sector_row": 2,
+            "sector_col": 0,
+            "Lv": "v4",
+            "type": "eggplant"
+        },
+        {
+            "sector_row": 2,
+            "sector_col": 0,
+            "Lv": "v4",
+            "type": "eggplant"
+        }
+    ],
+    "2-1": [
+        {
+            "sector_row": 2,
+            "sector_col": 1,
+            "Lv": "v2",
+            "type": "eggplant"
+        }
+    ],
+    "2-2": [
+        {
+            "sector_row": 2,
+            "sector_col": 2,
+            "Lv": "v2",
+            "type": "cabbage"
+        }
+    ]
+}
