@@ -1,4 +1,5 @@
 using System;
+using System.Threading.Tasks;
 using DG.Tweening;
 using TMPro;
 using UnityEngine;
@@ -9,15 +10,13 @@ public class UIController : MonoBehaviour
     
     public Canvas canvas;
     
-    public SimpleRegistrationManager registrationManager;
-
     public AudioSource audioSource;
     public AudioClip buttonSound;
 
     public GameObject loginPanel;
     public GameObject loginFrame;
-    public TMP_InputField usernameInput;
-    public TMP_InputField passwordInput;
+    public TMP_InputField loginUsernameInput;
+    public TMP_InputField loginPasswordInput;
 
     public GameObject signUpPanel;
     public GameObject signUpFrame;
@@ -32,6 +31,8 @@ public class UIController : MonoBehaviour
     public Vector3 prevCamPos;
 
     public GameObject visitPanel;
+    
+    public SSEObjectReceiver sseReceiver;
     
 
 
@@ -48,17 +49,29 @@ public class UIController : MonoBehaviour
         mainPanel.SetActive(false);
         signUpPanel.SetActive(false);
         signUpPanel.GetComponent<CanvasGroup>().alpha = 0;
+        sseReceiver = FindFirstObjectByType<SSEObjectReceiver>();
     }
 
 
-    public void OnLoginClick()
+    public async void OnLoginClick()
     {
         audioSource.PlayOneShot(buttonSound);
-        mainPanel.SetActive(true);
 
-        loginFrame.GetComponent<RectTransform>().DOScale(1.4f, 0.3f);
-        loginPanel.GetComponent<CanvasGroup>().DOFade(0, 0.4f).OnComplete(() => loginPanel.SetActive(false));
+        UserAuthResponseData response = await sseReceiver.LoginUserAsync(loginUsernameInput.text, password: loginPasswordInput.text);
 
+        if (response != null)
+        {
+            mainPanel.GetComponent<CanvasGroup>().alpha = 0;
+            mainPanel.SetActive(true);
+            mainPanel.GetComponent<CanvasGroup>().DOFade(1, 0.5f);
+
+            loginFrame.GetComponent<RectTransform>().DOScale(1.4f, 0.3f);
+            loginPanel.GetComponent<CanvasGroup>().DOFade(0, 0.4f).OnComplete(() => loginPanel.SetActive(false));
+        }
+
+        
+
+        
     }
 
     public void OnSignUpClick()
@@ -78,9 +91,14 @@ public class UIController : MonoBehaviour
 
     }
 
-    public void OnSignUpCompleteClick()
+    public async void OnSignUpCompleteClick()
     {
         audioSource.PlayOneShot(buttonSound);
+
+        UserAuthResponseData response = await sseReceiver.RegisterUserAsync(
+            signUpUsernameInput.text, signUpPasswordInput.text, signUpNicknameInput.text);
+        
+        
         loginFrame.SetActive(true);
         loginFrame.GetComponent<CanvasGroup>().alpha = 1;
         loginFrame.GetComponent<CanvasGroup>().blocksRaycasts = false;
@@ -91,9 +109,8 @@ public class UIController : MonoBehaviour
             signUpPanel.GetComponent<CanvasGroup>().blocksRaycasts = true;
             signUpPanel.SetActive(false);
         }));
-
-        registrationManager.RegisterUser(signUpUsernameInput.text, signUpPasswordInput.text,
-            signUpNicknameInput.text, registrationManager.HandleRegistrationResult);
+        
+        
 
     }
 

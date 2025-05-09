@@ -100,6 +100,7 @@ public class AuthUITester : MonoBehaviour
         if (response != null)
         {
             DisplayResult("Login Info", $"SSE connection will now target: {sseReceiver.sseTargetUserId}. Press 'Start SSE' if not auto-connected.");
+            Debug.Log(response);
         }
     }
 
