@@ -87,7 +87,8 @@ public class WorldSingleton : MonoBehaviour
 
     private void Update()
     {
-        expBar.value = (userExp / requiredExp) / 100f;
+        levelUpdate();
+        expBar.value = (userExp / requiredExp) * 100f;
     }
 
     #region JSONProcessing
@@ -231,20 +232,18 @@ public class WorldSingleton : MonoBehaviour
     public void levelUp()
     {
         requiredExp *= 1.3f;
+        userExp = 0f;
         userLv++;
     }
 
-    public int levelUpdate()
+    public void levelUpdate()
     {
         if (userExp >= requiredExp)
         {
             levelUp();
-            userExp -= requiredExp;
-            return userLv;
         }
 
         levelUIObj.GetComponent<TMP_Text>().text = userLv.ToString();
-        return userLv;
     }
 }
 

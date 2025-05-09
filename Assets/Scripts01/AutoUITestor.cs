@@ -120,37 +120,6 @@ public class AuthUITester : MonoBehaviour
         DisplayResult($"Update User '{idToUpdate}'", response);
     }
 
-    public async void AddUserExp(PlantLevel plantLevel)
-    {
-        UserDataResponse user = WorldSingleton.instance.userData;
-        string idToUpdate = user.id;
-
-        int exp = 0;
-
-        switch (plantLevel)
-        {
-            case PlantLevel.Lv1:
-                exp = 1;
-                break;
-            case PlantLevel.Lv2:
-                exp = 2;
-                break;
-            case PlantLevel.Lv3:
-                exp = 3;
-                break;
-            case PlantLevel.Lv4:
-                exp = -1;
-                break;
-        }
-
-        user.exp += exp;
-        user.exp = user.exp >= 0 ? user.exp : 0;
-        WorldSingleton.instance.levelUpdate();
-        
-        
-        await sseReceiver.UpdateUserDataAsync(idToUpdate, user.nickname, WorldSingleton.instance.userLv, user.exp);
-    }
-
     public async void OnGetMyUserInfoButtonClick()
     {
         if (sseReceiver == null) return;

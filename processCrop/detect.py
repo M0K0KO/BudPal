@@ -76,7 +76,6 @@ async def detect_objects_save_and_send_to_user(
     
     try:
         results = yolo_model.predict(pil_image, verbose=False)
-        results[0].show()
         sector_width = img_width / x_divisions
         sector_height = img_height / y_divisions
         grid_results: Dict[str, List[Dict[str, Any]]] = {

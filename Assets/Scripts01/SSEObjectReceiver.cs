@@ -526,6 +526,12 @@ public class SSEObjectReceiver : MonoBehaviour
             Debug.Log($"[SSEObjectReceiver] Farm initialized with width={Farm.instance.farmWidth}, breadth={Farm.instance.farmBreadth}");
         }
         
+        for (int x = 0; x < (int)(Farm.instance.farmWidth / Farm.instance.cellSize); x++) {
+            for (int z = 0; z < (int)(Farm.instance.farmBreadth / Farm.instance.cellSize); z++) {
+                Farm.instance.plantsManager.visitedPlant[x, z] = false;
+            }
+        }
+        
         foreach (var sectorEntry in detectionData)
         {
             string sectorKey = sectorEntry.Key; // e.g., "0-0", "1-2"
@@ -567,66 +573,28 @@ public class SSEObjectReceiver : MonoBehaviour
                         type,
                         lv
                     );
-                    
-                    // This loop seems to be part of a specific game logic,
-                    // likely iterating over the entire farm grid after each object update,
-                    // which might be inefficient if not intended.
-                    // Consider if this should be outside the objectsInSector loop or after all sectors are processed.
-
-                    // Access objInfo.sector_row, objInfo.sector_col, objInfo.Level, objInfo.ObjectType
-                    // Example:
-                    //Debug.Log($"  - Row: {objInfo.sector_row}, Col: {objInfo.sector_col}, Lv: {objInfo.Level}, Type: {objInfo.ObjectType}");
-                    //
-                    // YOUR UNITY UPDATE LOGIC GOES HERE:
-                    // - Find GameObjects representing these sectors or objects.
-                    // - Update UI elements (Text, Images, etc.).
-                    // - Trigger game events.
-                    // - Visualize bounding boxes (if you were to add coordinates back to server response).
-                    //
                 }
             }
-            for (int x = 0; x < (int)(Farm.instance.farmWidth / Farm.instance.cellSize); x++)
-            {
-                for (int z = 0; z < (int)(Farm.instance.farmBreadth / Farm.instance.cellSize); z++)
-                {
-                    bool isVisited = Farm.instance.plantsManager.visitedPlant[x, z];
-                    bool plantExistence = (Farm.instance.plantsManager.plantList[x, z] == null) ? false : true;
-                    if (!isVisited && plantExistence)
-                    {
-                        Debug.Log("수확할거야수확할거야수확할거야수확할거야");
-                        Farm.instance.plantsManager.HarvestPlant(x, z);
-                    }
-                }
-            }
-
-            if (Farm.instance.isInitialized == false)
-            {
-                Farm.instance.InitializeFarm();
-                Farm.instance.isInitialized = true;
-            }
-            // else: This sector has no detected objects. You might want to clear previous visuals for this sector.
         }
-        // After processing all sectors from a detection message, you might want to reset visited flags
-        // or perform actions on plants that were not visited in this update.
-        /*
-        if(Farm.instance != null && Farm.instance.plantsManager != null) // Ensure instances exist
+        for (int x = 0; x < (int)(Farm.instance.farmWidth / Farm.instance.cellSize); x++)
         {
-            for (int x = 0; x < (int)(Farm.instance.farmWidth / Farm.instance.cellSize); x++)
+            for (int z = 0; z < (int)(Farm.instance.farmBreadth / Farm.instance.cellSize); z++)
             {
-                for (int z = 0; z < (int)(Farm.instance.farmBreadth / Farm.instance.cellSize); z++)
+                bool isVisited = Farm.instance.plantsManager.visitedPlant[x, z];
+                bool plantExistence = (Farm.instance.plantsManager.plantList[x, z] == null) ? false : true;
+                if (!isVisited && plantExistence)
                 {
-                    // Example: if Farm.instance.plantsManager.visitedPlant[x, z] was used to mark visited plants in this update cycle
-                    // if (!Farm.instance.plantsManager.visitedPlant[x, z] && Farm.instance.plantsManager.plantList[x,z] != null)
-                    // {
-                    //     // This plant existed but was not in the current detection update - perhaps remove it or mark it as withered
-                    //     Farm.instance.plantsManager.HandleUnvisitedPlant(x,z); 
-                    // }
-                    // Reset for next update cycle
-                    // Farm.instance.plantsManager.visitedPlant[x, z] = false;
+                    Debug.Log("수확할거야수확할거야수확할거야수확할거야");
+                    Farm.instance.plantsManager.HarvestPlant(x, z);
                 }
             }
         }
-        */
+
+        if (Farm.instance.isInitialized == false)
+        {
+            Farm.instance.InitializeFarm();
+            Farm.instance.isInitialized = true;
+        }
     }
 
 

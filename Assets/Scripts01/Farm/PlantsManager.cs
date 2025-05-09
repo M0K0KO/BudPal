@@ -119,17 +119,19 @@ public class PlantsManager : MonoBehaviour
         WorldSingleton.instance.harvestedPlants.Add(targetPlant);
         
         Material material = targetPlant.plantController.currentActiveRenderer.material;
+        
         Sequence sequence = DOTween.Sequence();
 
         sequence.Append(material.DOFade(0f, 0.5f).SetEase(Ease.Linear));
         sequence.Join(targetPlant.transform.DOMoveY(10f, 0.5f).SetEase(Ease.Linear));
 
+        
         sequence.OnComplete(() =>
         {
-            WorldSingleton.instance.authUITester.AddUserExp(targetPlant.plantInfo.plantLevel);
             Destroy(targetPlant.gameObject);
         });
         
+        WorldSingleton.instance.userExp += 4;
         Debug.Log("유저 레벨 : " + WorldSingleton.instance.userLv + " 유저 경험치 : " + WorldSingleton.instance.userExp);
     }
 }
