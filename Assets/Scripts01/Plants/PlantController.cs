@@ -102,17 +102,11 @@ public class PlantController : MonoBehaviour
         if (plantLevel == PlantLevel.Lv4 && plant.plantInfo.plantLevel != PlantLevel.Lv4)
         {
             Debug.Log("이새끼 아픔;;");
-            GameObject icon = Instantiate(UIController.instance.plantDeadIconPrefab, plant.transform, false);
-            icon.transform.localPosition = new Vector3(icon.transform.localPosition.x, icon.transform.localPosition.y + 10f, icon.transform.localPosition.z);
-
         }
 
         if (plantLevel == PlantLevel.Lv3 && plant.plantInfo.plantLevel != PlantLevel.Lv3)
         {
             Debug.Log("다 컸다!!");
-            GameObject icon = Instantiate(UIController.instance.plantReadyIconPrefab, plant.transform, false);
-            icon.transform.localPosition = new Vector3(icon.transform.localPosition.x,
-                icon.transform.localPosition.y + 10f, icon.transform.localPosition.z);
         }
         
         PlantLevel prevLevel = plant.plantInfo.plantLevel;

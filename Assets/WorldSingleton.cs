@@ -209,7 +209,7 @@ public class WorldSingleton : MonoBehaviour
         {
             Debug.Log(user.id);
         }
-        LoadFarmData(allUsers[1].id);
+        LoadFarmData("KTH");
     }
     
     public void SwitchSceneToUserScene()
@@ -224,9 +224,8 @@ public class WorldSingleton : MonoBehaviour
 
     public async void LoadFarmData(string userId)
     {
-        authUITester.OnRequestCombinedDataButtonClick();    
-        //UserDataResponse response = await sseReceiver.RequestCombinedUserDataAsync(userId);
-        //sseReceiver.UpdateDetectionInfoInUnity(response.detection_data);
+        UserDataResponse response = await sseReceiver.RequestCombinedUserDataAsync(userId);
+        sseReceiver.UpdateDetectionInfoInUnity(response.detection_data);
     }
 
     public void levelUp()
