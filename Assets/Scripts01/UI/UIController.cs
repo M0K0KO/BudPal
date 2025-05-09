@@ -45,6 +45,9 @@ public class UIController : MonoBehaviour
 
     public GameObject mainShopPanel;
 
+    public GameObject visitButton;
+    public GameObject returnButton;
+
 
     private void Awake()
     {
@@ -178,6 +181,8 @@ public class UIController : MonoBehaviour
             {
                 WorldSingleton.instance.plantDetailWindow.SetActive(false);
             }
+
+            GetComponent<CanvasGroup>().blocksRaycasts = true;
             
             Debug.Log("Detail view forcibly reset");
         }
@@ -189,6 +194,8 @@ public class UIController : MonoBehaviour
 
     public void OnVisitClick()
     {
+        Debug.Log("ONVISITCLICK");
+        
         audioSource.PlayOneShot(buttonSound);
         mainPanel.GetComponent<CanvasGroup>().blocksRaycasts = false;
         visitPanel.GetComponent<CanvasGroup>().alpha = 0f;
