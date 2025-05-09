@@ -35,7 +35,6 @@ public class NewDetectedObjectInfo
     public string ObjectType;
 }
 
-// FastAPI ������ UserDataResponse �� (YOLO ������ /user_data/ �����)
 [System.Serializable]
 public class UserDataResponse // Combined data from main server's /user_data/
 {
