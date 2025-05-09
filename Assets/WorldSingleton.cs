@@ -204,7 +204,11 @@ public class WorldSingleton : MonoBehaviour
         userScene.SetActive(false);
         friendScene.SetActive(true);
         Farm.instance.ClearFarm();
-        
+
+        foreach (var user in allUsers)
+        {
+            Debug.Log(user.id);
+        }
         LoadFarmData(allUsers[1].id);
     }
     
@@ -220,12 +224,9 @@ public class WorldSingleton : MonoBehaviour
 
     public async void LoadFarmData(string userId)
     {
-        // 1. 사용자 ID 설정
-        sseReceiver.sseTargetUserId = userId;
-
-        // 2. 농장 데이터 요청
-        UserDataResponse response = await sseReceiver.RequestCombinedUserDataAsync(userId);
-        sseReceiver.UpdateDetectionInfoInUnity(response.detection_data);
+        authUITester.OnRequestCombinedDataButtonClick();    
+        //UserDataResponse response = await sseReceiver.RequestCombinedUserDataAsync(userId);
+        //sseReceiver.UpdateDetectionInfoInUnity(response.detection_data);
     }
 
     public void levelUp()

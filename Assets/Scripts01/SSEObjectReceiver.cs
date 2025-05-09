@@ -6,6 +6,8 @@ using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
 using System;
+using TMPro;
+
 // using UnityEngine.PlayerLoop; // ���ʿ��Ͽ� ����
 
 // ������ UserBase, UserResponse �𵨿� �ش� (id, nickname, level, exp)
@@ -235,6 +237,8 @@ public class SSEObjectReceiver : MonoBehaviour
 
     public async Task<UserDataResponse> RequestCombinedUserDataAsync(string userIdToRequestDataFor)
     {
+        Debug.Log("졸려졸려");
+        
         if (httpClient == null) { Debug.LogError("[SSEObjectReceiver] HttpClient not initialized."); return null; }
         if (string.IsNullOrEmpty(userIdToRequestDataFor)) { Debug.LogError("[SSEObjectReceiver] userIdToRequestDataFor cannot be null or empty."); return null; }
 
@@ -266,6 +270,7 @@ public class SSEObjectReceiver : MonoBehaviour
                 else Debug.LogWarning($"[SSEObjectReceiver] Deserialized combined data for '{userIdToRequestDataFor}' is null. JSON: {jsonResponse}");
 
                 WorldSingleton.instance.userData = userData;
+                WorldSingleton.instance.userNameObj.GetComponent<TMP_Text>().text = userData.nickname;
                 return userData;
             }
         }

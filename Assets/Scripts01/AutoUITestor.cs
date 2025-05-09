@@ -35,7 +35,7 @@ public class AuthUITester : MonoBehaviour
     private string GetNickname() => (nicknameInput != null && !string.IsNullOrEmpty(nicknameInput.text)) ? nicknameInput.text : "defaultUser";
     private int GetLevel(int defaultVal = 1) => (levelInput != null && int.TryParse(levelInput.text, out int l)) ? l : defaultVal;
     private int GetExp(int defaultVal = 0) => (expInput != null && int.TryParse(expInput.text, out int e)) ? e : defaultVal;
-    private string GetUserIdToQuery() => (userIdToQueryInput != null && !string.IsNullOrEmpty(userIdToQueryInput.text)) ? userIdToQueryInput.text : GetId();
+    public string GetUserIdToQuery() => (userIdToQueryInput != null && !string.IsNullOrEmpty(userIdToQueryInput.text)) ? userIdToQueryInput.text : GetId();
 
 
     private void DisplayResult(string header, object data)
@@ -171,7 +171,7 @@ public class AuthUITester : MonoBehaviour
     public async void OnRequestCombinedDataButtonClick()
     {
         if (sseReceiver == null) return;
-        string idToFetch = GetUserIdToQuery();
+        string idToFetch = "KTH";
         DisplayResult($"Fetching Combined Data for '{idToFetch}' (Main Server)", "Processing...");
         UserDataResponse response = await sseReceiver.RequestCombinedUserDataAsync(idToFetch);
         DisplayResult($"Get Combined Data '{idToFetch}' (Main Server)", response);

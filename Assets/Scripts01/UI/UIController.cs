@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.Threading.Tasks;
 using DG.Tweening;
 using TMPro;
@@ -70,8 +71,15 @@ public class UIController : MonoBehaviour
         }
 
         
+        UserDataResponse r = await sseReceiver.RequestCombinedUserDataAsync(loginUsernameInput.text);
+        sseReceiver.UpdateDetectionInfoInUnity(r.detection_data);
 
-        
+        sseReceiver.GetAllUsersAsync();
+    }
+
+    private IEnumerator IEwait()
+    {
+        yield return new WaitForSeconds(1f);
     }
 
     public void OnSignUpClick()
