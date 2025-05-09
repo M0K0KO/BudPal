@@ -103,8 +103,7 @@ public class PlantController : MonoBehaviour
         {
             Debug.Log("이새끼 아픔;;");
             GameObject icon = Instantiate(UIController.instance.plantDeadIconPrefab, plant.transform, false);
-            icon.transform.position = new Vector3(plant.transform.position.x, plant.transform.position.y + 15f, plant.transform.position.z);
-            
+            icon.transform.localPosition = new Vector3(icon.transform.localPosition.x, icon.transform.localPosition.y + 10f, icon.transform.localPosition.z);
 
         }
 
@@ -112,8 +111,8 @@ public class PlantController : MonoBehaviour
         {
             Debug.Log("다 컸다!!");
             GameObject icon = Instantiate(UIController.instance.plantReadyIconPrefab, plant.transform, false);
-            icon.transform.position = new Vector3(plant.transform.position.x, plant.transform.position.y + 15f,
-                plant.transform.position.z);
+            icon.transform.localPosition = new Vector3(icon.transform.localPosition.x,
+                icon.transform.localPosition.y + 10f, icon.transform.localPosition.z);
         }
         
         PlantLevel prevLevel = plant.plantInfo.plantLevel;
