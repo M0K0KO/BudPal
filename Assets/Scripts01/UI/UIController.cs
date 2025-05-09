@@ -34,8 +34,9 @@ public class UIController : MonoBehaviour
     public GameObject visitPanel;
     
     public SSEObjectReceiver sseReceiver;
-    
 
+    public GameObject plantReadyIconPrefab;
+    public GameObject plantDeadIconPrefab;
 
 
     private void Awake()
