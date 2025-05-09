@@ -52,8 +52,6 @@ public class PlantsManager : MonoBehaviour
         float normalizedX = (topLeftCorner.x + ((cellSize / 2f) + (x * cellSize))) / farm.farmWidth;
         float normalizedZ = (topLeftCorner.z + ((cellSize / 2f) + (z * cellSize))) / farm.farmBreadth;
 
-        Debug.Log(topLeftCorner);
-        
         return new Vector3(normalizedX, transform.position.y + 0.5f, normalizedZ);
     }
 
@@ -64,8 +62,6 @@ public class PlantsManager : MonoBehaviour
     {
         GameObject instantiatedPlant = Instantiate(plantPrefab, transform.position, Quaternion.identity);
         Plant plant = instantiatedPlant.GetComponent<Plant>();
-        
-        Debug.Log(row + "," + col);
         
         if (plantList[row, col] == null)
         {
@@ -128,8 +124,12 @@ public class PlantsManager : MonoBehaviour
         sequence.Append(material.DOFade(0f, 0.5f).SetEase(Ease.Linear));
         sequence.Join(targetPlant.transform.DOMoveY(10f, 0.5f).SetEase(Ease.Linear));
 
-        sequence.OnComplete(() => {
+        sequence.OnComplete(() =>
+        {
+            WorldSingleton.instance.authUITester.AddUserExp(targetPlant.plantInfo.plantLevel);
             Destroy(targetPlant.gameObject);
         });
+        
+        Debug.Log("유저 레벨 : " + WorldSingleton.instance.userLv + " 유저 경험치 : " + WorldSingleton.instance.userExp);
     }
 }

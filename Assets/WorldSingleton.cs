@@ -6,6 +6,7 @@ using System.IO;
 using System.Text;
 using UnityEngine;
 using UnityEngine.Networking;
+using UnityEngine.Serialization;
 
 public class WorldSingleton : MonoBehaviour
 {
@@ -32,6 +33,8 @@ public class WorldSingleton : MonoBehaviour
     public Sprite v4_eggplant;
     
     private string serverUrl = "";
+    
+    [FormerlySerializedAs("authUITesterr")] [FormerlySerializedAs("authUITesert")] public AuthUITester authUITester;
     
     private void Awake()
     {
@@ -165,6 +168,30 @@ public class WorldSingleton : MonoBehaviour
         return "error";
     }
     #endregion
+
+    public float baseRequiredExp = 10;
+    public float requiredExp = 10;
+    public float expGrowthRate = 1.3f;
+    public float userExp = 0f;
+    public int userLv = 0;
+
+    public void levelUp()
+    {
+        requiredExp *= 1.3f;
+        userLv++;
+    }
+
+    public int levelUpdate()
+    {
+        if (userExp >= requiredExp)
+        {
+            levelUp();
+            userExp -= requiredExp;
+            return userLv;
+        }
+
+        return userLv;
+    }
 }
 
 public class JsonPlant
