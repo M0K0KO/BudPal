@@ -226,6 +226,8 @@ public class UIController : MonoBehaviour
 
     public void OnMainShopExitClick()
     {
+        mainPanel.GetComponent<CanvasGroup>().blocksRaycasts = true;
+        mainShopPanel.GetComponent<CanvasGroup>().alpha = 1f;
         audioSource.PlayOneShot(buttonSound);
         mainShopPanel.GetComponent<CanvasGroup>().blocksRaycasts = false;
         mainShopPanel.GetComponent<CanvasGroup>().DOFade(0f, 0.5f).OnComplete(() =>
