@@ -1,0 +1,24 @@
+{
+    "item_name": "Apple",
+    "current_stock": 9,
+    "purchase_history": [
+        {
+            "log_id": "4ff6651b-f09b-4bef-b89a-405b83c52e0b",
+            "user_id": "KTH",
+            "purchased_count": 3,
+            "timestamp": "2025-05-09T19:25:01.028718Z"
+        },
+        {
+            "log_id": "af9d8f41-5f2f-41e6-974f-13a40cd47d30",
+            "user_id": "KTH",
+            "purchased_count": 3,
+            "timestamp": "2025-05-09T19:25:02.973439Z"
+        },
+        {
+            "log_id": "6a7c0c0f-923c-478c-9ec7-6ce9ad2c6c9f",
+            "user_id": "KTH",
+            "purchased_count": 3,
+            "timestamp": "2025-05-09T19:25:04.597167Z"
+        }
+    ]
+}

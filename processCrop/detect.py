@@ -73,9 +73,10 @@ async def detect_objects_save_and_send_to_user(
             raise HTTPException(status_code=400, detail="Uploaded image has zero width or height.")
     except Exception as e:
         raise HTTPException(status_code=400, detail=f"Invalid image file or could not read image: {str(e)}")
-
+    
     try:
         results = yolo_model.predict(pil_image, verbose=False)
+        results[0].show()
         sector_width = img_width / x_divisions
         sector_height = img_height / y_divisions
         grid_results: Dict[str, List[Dict[str, Any]]] = {

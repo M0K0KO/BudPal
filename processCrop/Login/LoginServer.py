@@ -3,7 +3,6 @@ import json
 import bcrypt
 import aiofiles # 비동기 파일 처리를 위해 추가
 from typing import Optional, Dict, Any, List # List 추가
-import asyncio
 
 from fastapi import FastAPI, Form, HTTPException, status, Depends
 from pydantic import BaseModel
@@ -271,5 +270,3 @@ if __name__ == "__main__":
     import uvicorn
     print(f"FastAPI Auth 서버를 시작합니다 (데이터 저장 폴더: '{DB_DIR}/<ID>/user_data.json' 구조). http://127.0.0.1:8001/docs 에서 API 문서를 확인하세요.")
     uvicorn.run(app, host="0.0.0.0", port=8001)
-
-    
