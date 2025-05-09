@@ -6,7 +6,7 @@ import os # 폴더 내 이미지 파일을 가져오기 위해 추가
 # --- 설정 변수 ---
 SERVER_URL = "http://localhost:8000/detect/"
 
-USER_ID_TO_SEND = "defaultUser"  # <<--- 서버로 전송할 사용자 ID
+USER_ID_TO_SEND = "KTH"  # <<--- 서버로 전송할 사용자 ID
 IMAGE_FOLDER_PATH = f'./Login/db/{USER_ID_TO_SEND}/'  # 이미지가 있는 폴더 경로
 GRID_X = 5  # 가로 분할 수
 GRID_Y = 4  # 세로 분할 수
