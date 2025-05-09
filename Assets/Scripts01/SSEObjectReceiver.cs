@@ -580,25 +580,25 @@ public class SSEObjectReceiver : MonoBehaviour
                     // - Visualize bounding boxes (if you were to add coordinates back to server response).
                     //
                 }
-                
-                for (int x = 0; x < (int)(Farm.instance.farmWidth / Farm.instance.cellSize); x++)
+            }
+            for (int x = 0; x < (int)(Farm.instance.farmWidth / Farm.instance.cellSize); x++)
+            {
+                for (int z = 0; z < (int)(Farm.instance.farmBreadth / Farm.instance.cellSize); z++)
                 {
-                    for (int z = 0; z < (int)(Farm.instance.farmBreadth / Farm.instance.cellSize); z++)
+                    bool isVisited = Farm.instance.plantsManager.visitedPlant[x, z];
+                    bool plantExistence = (Farm.instance.plantsManager.plantList[x, z] == null) ? false : true;
+                    if (!isVisited && plantExistence)
                     {
-                        bool isVisited = Farm.instance.plantsManager.visitedPlant[x, z];
-                        bool plantExistence = (Farm.instance.plantsManager.plantList[x, z] == null) ? false : true;
-                        if (!isVisited && plantExistence)
-                        {
-                            Farm.instance.plantsManager.HarvestPlant(x, z);
-                        }
+                        Debug.Log("수확할거야수확할거야수확할거야수확할거야");
+                        Farm.instance.plantsManager.HarvestPlant(x, z);
                     }
                 }
+            }
 
-                if (Farm.instance.isInitialized == false)
-                {
-                    Farm.instance.InitializeFarm();
-                    Farm.instance.isInitialized = true;
-                }
+            if (Farm.instance.isInitialized == false)
+            {
+                Farm.instance.InitializeFarm();
+                Farm.instance.isInitialized = true;
             }
             // else: This sector has no detected objects. You might want to clear previous visuals for this sector.
         }

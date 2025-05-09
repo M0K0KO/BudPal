@@ -1,12 +1,12 @@
 using UnityEngine;
-using TMPro; // TextMeshPro UI¸¦ »ç¿ëÇÏ´Â °æ¿ì
+using TMPro; // TextMeshPro UIï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½Ï´ï¿½ ï¿½ï¿½ï¿½
 using System.Collections.Generic;
-// using Newtonsoft.Json; // °á°ú ·Î±ë¿¡ ÇÊ¿äÇÏ´Ù¸é »ç¿ë (SSEObjectReceiver°¡ ÀÌ¹Ì »ç¿ë Áß)
+// using Newtonsoft.Json; // ï¿½ï¿½ï¿½ ï¿½Î±ë¿¡ ï¿½Ê¿ï¿½ï¿½Ï´Ù¸ï¿½ ï¿½ï¿½ï¿½ (SSEObjectReceiverï¿½ï¿½ ï¿½Ì¹ï¿½ ï¿½ï¿½ï¿½ ï¿½ï¿½)
 
 public class AuthUITester : MonoBehaviour
 {
     [Header("References")]
-    public SSEObjectReceiver sseReceiver; // ÀÎ½ºÆåÅÍ¿¡¼­ SSEObjectReceiver ÄÄÆ÷³ÍÆ® ÇÒ´ç
+    public SSEObjectReceiver sseReceiver; // ï¿½Î½ï¿½ï¿½ï¿½ï¿½Í¿ï¿½ï¿½ï¿½ SSEObjectReceiver ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ® ï¿½Ò´ï¿½
 
     [Header("UI Input Fields (Optional)")]
     public TMP_InputField idInput;
@@ -14,10 +14,10 @@ public class AuthUITester : MonoBehaviour
     public TMP_InputField nicknameInput;
     public TMP_InputField levelInput;
     public TMP_InputField expInput;
-    public TMP_InputField userIdToQueryInput; // GetMyUserInfo, UpdateUser, CombinedUserData µî ´ë»ó ID
+    public TMP_InputField userIdToQueryInput; // GetMyUserInfo, UpdateUser, CombinedUserData ï¿½ï¿½ ï¿½ï¿½ï¿½ ID
 
     [Header("UI Output")]
-    public TextMeshProUGUI resultText; // °á°ú Ç¥½Ã¿ë
+    public TextMeshProUGUI resultText; // ï¿½ï¿½ï¿½ Ç¥ï¿½Ã¿ï¿½
 
     void Start()
     {
@@ -29,10 +29,10 @@ public class AuthUITester : MonoBehaviour
         }
     }
 
-    // ÀÔ·Â ÇÊµå¿¡¼­ °ª °¡Á®¿À±â (¾øÀ¸¸é ±âº»°ª »ç¿ë)
-    private string GetId() => (idInput != null && !string.IsNullOrEmpty(idInput.text)) ? idInput.text : "KTH";
-    private string GetPassword() => (passwordInput != null && !string.IsNullOrEmpty(passwordInput.text)) ? passwordInput.text : "KTH";
-    private string GetNickname() => (nicknameInput != null && !string.IsNullOrEmpty(nicknameInput.text)) ? nicknameInput.text : "KTH";
+    // ï¿½Ô·ï¿½ ï¿½Êµå¿¡ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ (ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½âº»ï¿½ï¿½ ï¿½ï¿½ï¿½)
+    private string GetId() => (idInput != null && !string.IsNullOrEmpty(idInput.text)) ? idInput.text : "defaultUser";
+    private string GetPassword() => (passwordInput != null && !string.IsNullOrEmpty(passwordInput.text)) ? passwordInput.text : "defaultUser";
+    private string GetNickname() => (nicknameInput != null && !string.IsNullOrEmpty(nicknameInput.text)) ? nicknameInput.text : "defaultUser";
     private int GetLevel(int defaultVal = 1) => (levelInput != null && int.TryParse(levelInput.text, out int l)) ? l : defaultVal;
     private int GetExp(int defaultVal = 0) => (expInput != null && int.TryParse(expInput.text, out int e)) ? e : defaultVal;
     private string GetUserIdToQuery() => (userIdToQueryInput != null && !string.IsNullOrEmpty(userIdToQueryInput.text)) ? userIdToQueryInput.text : GetId();
@@ -58,7 +58,7 @@ public class AuthUITester : MonoBehaviour
                 message += item.ToString() + "\n";
                 count++;
                 if (count >= 3)
-                { // ³Ê¹« ¸¹À¸¸é »óÀ§ 3°³¸¸ Ç¥½Ã
+                { // ï¿½Ê¹ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ 3ï¿½ï¿½ï¿½ï¿½ Ç¥ï¿½ï¿½
                     message += $"... (and {list.Count - count} more)";
                     break;
                 }
@@ -66,7 +66,7 @@ public class AuthUITester : MonoBehaviour
         }
         else
         {
-            // UserAuthResponseData, UserDataResponse µîÀÇ .ToString() »ç¿ë
+            // UserAuthResponseData, UserDataResponse ï¿½ï¿½ï¿½ï¿½ .ToString() ï¿½ï¿½ï¿½
             message = $"{header}:\n{data.ToString()}";
         }
 
@@ -74,7 +74,7 @@ public class AuthUITester : MonoBehaviour
         if (resultText != null) resultText.text = message;
     }
 
-    // --- Å×½ºÆ® ¹öÆ° ÇÚµé·¯ ---
+    // --- ï¿½×½ï¿½Æ® ï¿½ï¿½Æ° ï¿½Úµé·¯ ---
 
     public async void OnRegisterButtonClick()
     {
@@ -106,9 +106,8 @@ public class AuthUITester : MonoBehaviour
     public async void OnUpdateUserButtonClick()
     {
         if (sseReceiver == null) return;
-        string idToUpdate = GetUserIdToQuery();
+        string idToUpdate = WorldSingleton.instance.userData.id;
 
-        // UI¿¡¼­ Á÷Á¢ °ªÀ» °¡Á®¿À°Å³ª, ºñ¾îÀÖÀ¸¸é null·Î Ã³¸®
         string newNick = (nicknameInput != null && !string.IsNullOrEmpty(nicknameInput.text)) ? nicknameInput.text : null;
         int? newLevel = null;
         if (levelInput != null && !string.IsNullOrEmpty(levelInput.text) && int.TryParse(levelInput.text, out int l)) newLevel = l;
@@ -118,6 +117,37 @@ public class AuthUITester : MonoBehaviour
         DisplayResult($"Updating user '{idToUpdate}'", "Processing...");
         UserAuthResponseData response = await sseReceiver.UpdateUserDataAsync(idToUpdate, newNick, newLevel, newExp);
         DisplayResult($"Update User '{idToUpdate}'", response);
+    }
+
+    public async void AddUserExp(PlantLevel plantLevel)
+    {
+        UserDataResponse user = WorldSingleton.instance.userData;
+        string idToUpdate = user.id;
+
+        int exp = 0;
+
+        switch (plantLevel)
+        {
+            case PlantLevel.Lv1:
+                exp = 1;
+                break;
+            case PlantLevel.Lv2:
+                exp = 2;
+                break;
+            case PlantLevel.Lv3:
+                exp = 3;
+                break;
+            case PlantLevel.Lv4:
+                exp = -1;
+                break;
+        }
+
+        user.exp += exp;
+        user.exp = user.exp >= 0 ? user.exp : 0;
+        WorldSingleton.instance.levelUpdate();
+        
+        
+        await sseReceiver.UpdateUserDataAsync(idToUpdate, user.nickname, WorldSingleton.instance.userLv, user.exp);
     }
 
     public async void OnGetMyUserInfoButtonClick()
@@ -155,7 +185,7 @@ public class AuthUITester : MonoBehaviour
             DisplayResult("Set SSE Target ID", msg);
             return;
         }
-        sseReceiver.sseTargetUserId = userIdToQueryInput.text; // UserIDToQueryInputÀÇ °ªÀ» »ç¿ë
+        sseReceiver.sseTargetUserId = userIdToQueryInput.text; // UserIDToQueryInputï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½
         string successMsg = $"SSE Target User ID manually set to: {sseReceiver.sseTargetUserId}. Press 'Start SSE for Current User' button to connect/reconnect.";
         Debug.Log($"[AuthUITester] {successMsg}");
         DisplayResult("Set SSE Target ID", successMsg);
@@ -166,7 +196,7 @@ public class AuthUITester : MonoBehaviour
         if (sseReceiver == null) return;
         DisplayResult($"Starting SSE for '{sseReceiver.sseTargetUserId}'", "Processing...");
         sseReceiver.StartSseConnectionForCurrentUser();
-        // SSE ¿¬°áÀº ºñµ¿±â ¹é±×¶ó¿îµå·Î ÁøÇàµÊ, °á°ú´Â SSEObjectReceiverÀÇ ·Î±×¸¦ ÅëÇØ È®ÀÎ
+        // SSE ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ñµ¿±ï¿½ ï¿½ï¿½×¶ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½, ï¿½ï¿½ï¿½ï¿½ï¿½ SSEObjectReceiverï¿½ï¿½ ï¿½Î±×¸ï¿½ ï¿½ï¿½ï¿½ï¿½ È®ï¿½ï¿½
         DisplayResult($"Start SSE for '{sseReceiver.sseTargetUserId}'", "SSE connection attempt initiated. Check console for status.");
     }
 }

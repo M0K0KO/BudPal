@@ -64,8 +64,6 @@ public class PlantController : MonoBehaviour
         PlantType currentType = plant.plantInfo.plantType;
         PlantLevel currentLevel = plant.plantInfo.plantLevel;
 
-        Debug.Log(currentType + "_" + currentLevel);
-        
         MeshRenderer targetMesh = transform.Find(currentType + "_" + currentLevel).GetComponent<MeshRenderer>();
         currentActiveRenderer = targetMesh;
         currentOutline = targetMesh.GetComponent<Outline>();
