@@ -38,6 +38,11 @@ public class UIController : MonoBehaviour
     public GameObject plantReadyIconPrefab;
     public GameObject plantDeadIconPrefab;
 
+    public Sprite firstLevelItem;
+    public Sprite secondLevelItem;
+    public Sprite thirdLevelItem;
+    public Sprite fourthLevelItem;
+
 
     private void Awake()
     {

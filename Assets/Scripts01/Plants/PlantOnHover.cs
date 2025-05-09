@@ -62,6 +62,9 @@ public class PlantOnHover : MonoBehaviour
                     plantDetailWindow.plantRank.text = plant.plantInfo.rank.ToString();
                     plantDetailWindow.plantStatus.text = plant.plantInfo.PlantStatusByRank();
                     plantDetailWindow.plantImage.sprite = plant.plantInfo.PlantImageByInfo();
+                    plantDetailWindow.itemImage.sprite = plant.plantInfo.ItemImageByInfo();
+                    plantDetailWindow.itemName.text = plant.plantInfo.ItemNameByInfo();
+                    plantDetailWindow.plantDescription.text = plant.plantInfo.PlantDescByInfo();
                     
                     /////////////////////////////////////////////////// 바꿔야함
                     plantDetailWindow.plantDescription.text = plant.plantInfo.PlantStatusByRank();

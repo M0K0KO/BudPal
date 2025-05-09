@@ -919,6 +919,8 @@ MonoBehaviour:
   plantStatus: {fileID: 5564779574169020446}
   plantDescription: {fileID: 8318652971964776881}
   plantImage: {fileID: 4248449500070328697}
+  itemName: {fileID: 4829958759115974419}
+  itemImage: {fileID: 3860334784937426103}
 --- !u!1 &3231310225859073324
 GameObject:
   m_ObjectHideFlags: 0

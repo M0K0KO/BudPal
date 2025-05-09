@@ -40,6 +40,56 @@ public class PlantInfo : MonoBehaviour
         
         return result;
     }
+
+    public Sprite ItemImageByInfo()
+    {
+        switch (plantLevel)
+        {
+            case PlantLevel.Lv1:
+                return UIController.instance.firstLevelItem;
+            case PlantLevel.Lv2:
+                return UIController.instance.secondLevelItem;
+            case PlantLevel.Lv3:
+                return UIController.instance.thirdLevelItem;
+            case PlantLevel.Lv4:
+                return UIController.instance.fourthLevelItem;
+            default:
+                return null;
+        }
+    }
+
+    public string ItemNameByInfo()
+    {
+        switch (plantLevel)
+        {
+            case PlantLevel.Lv1:
+                return "성장촉진제";
+            case PlantLevel.Lv2:
+                return "영양보충제";
+            case PlantLevel.Lv3:
+                return "품질향상제";
+            case PlantLevel.Lv4:
+                return "회복살충제";
+            default:
+                return null;
+        }
+    }
+
+    public string PlantDescByInfo()
+    {
+        switch (plantType)
+        {
+            case PlantType.Tomato:
+                return "상큼하고 과즙 풍부한 토마토는 다양한 요리에 활용되는 건강한 붉은 과일입니다.";
+            case PlantType.Eggplant:
+                return "보라색 광택의 가지는 부드러운 식감으로 다양한 조리법에 활용되는 영양 채소입니다.";
+            case PlantType.Cabbage:
+                return "아삭한 양배추는 영양소가 풍부하여 다양한 요리에 활용되는 건강 채소입니다.";
+            default:
+                return null;
+        }
+    }
+    
 }
 
 
