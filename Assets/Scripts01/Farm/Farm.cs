@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class Farm : MonoBehaviour
@@ -17,6 +18,8 @@ public class Farm : MonoBehaviour
 
     public bool isInitialized = false;
 
+    private List<GameObject> groundPieces;
+
     private void Awake()
     {
         if (null == instance)
@@ -31,6 +34,8 @@ public class Farm : MonoBehaviour
         
         meshRenderer = GetComponent<MeshRenderer>();
         plantsManager = GetComponent<PlantsManager>();
+        
+        groundPieces = new List<GameObject>();
     }
 
     private void Start()
@@ -53,12 +58,31 @@ public class Farm : MonoBehaviour
     
     public void InitializeFarm()
     {
+        gameObject.transform.localScale = new Vector3(farmWidth, 1f, farmWidth);
+        
         for (int x = 0; x < (int)(farmWidth / cellSize); x++)
         {
             for (int z = 0; z < (int)(farmBreadth / cellSize); z++)
             {
                 GameObject instantiatedGround = Instantiate(groundPiece, groundPosition(x, z), Quaternion.identity);
+                groundPieces.Add(instantiatedGround);
             }
+        }
+    }
+
+    public void ClearFarm()
+    {
+        for (int i = transform.childCount - 1; i >= 0; i--)
+        {
+            Destroy(transform.GetChild(i).gameObject);
+        }
+
+        farmBreadth = 0;
+        farmWidth = 0;
+        plantsManager.MakePlantsList();
+        foreach (GameObject groundPiece in groundPieces)
+        {
+            Destroy(groundPiece);
         }
     }
 }

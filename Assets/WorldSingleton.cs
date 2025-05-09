@@ -12,6 +12,7 @@ public class WorldSingleton : MonoBehaviour
     public static WorldSingleton instance;
     public GameObject plantDetailWindow;
     public List<Plant> harvestedPlants;
+    public SSEObjectReceiver sseReceiver;
 
     public List<UserAuthResponseData> allUsers;
     public UserDataResponse userData;
@@ -32,6 +33,10 @@ public class WorldSingleton : MonoBehaviour
     public Sprite v4_eggplant;
     
     private string serverUrl = "";
+
+
+    public GameObject userScene;
+    public GameObject friendScene;
     
     private void Awake()
     {
@@ -39,6 +44,9 @@ public class WorldSingleton : MonoBehaviour
         else if (instance != this) { Destroy(gameObject); }
         
         harvestedPlants = new List<Plant>();
+        
+        userScene.SetActive(true);
+        friendScene.SetActive(false);
     }
 
     private void Start()
@@ -165,6 +173,37 @@ public class WorldSingleton : MonoBehaviour
         return "error";
     }
     #endregion
+
+
+    public void SwitchSceneToFriendScene()
+    {
+        Farm.instance.gameObject.transform.SetParent(friendScene.transform);
+        userScene.SetActive(false);
+        friendScene.SetActive(true);
+        Farm.instance.ClearFarm();
+        
+        LoadFarmData(allUsers[1].id);
+    }
+    
+    public void SwitchSceneToUserScene()
+    {    
+        Farm.instance.gameObject.transform.SetParent(userScene.transform);
+        userScene.SetActive(true);
+        friendScene.SetActive(false);
+        Farm.instance.ClearFarm();
+        
+        LoadFarmData(allUsers[2].id);
+    }
+    
+    public async void LoadFarmData(string userId)
+    {
+        // 1. 사용자 ID 설정
+        sseReceiver.sseTargetUserId = userId;
+        
+        // 2. 농장 데이터 요청
+        UserDataResponse response = await sseReceiver.RequestCombinedUserDataAsync(userId);
+        sseReceiver.UpdateDetectionInfoInUnity(response.detection_data);
+    }
 }
 
 public class JsonPlant

@@ -475,7 +475,7 @@ public class SSEObjectReceiver : MonoBehaviour
     #endregion
 
     // ����ڰ� ������ UpdateDetectionInfoInUnity �޼��� (Farm ���� �ּ� ����)
-    void UpdateDetectionInfoInUnity(Dictionary<string, List<NewDetectedObjectInfo>> detectionData)
+    public void UpdateDetectionInfoInUnity(Dictionary<string, List<NewDetectedObjectInfo>> detectionData)
     {
         // Example: Log the received data. Replace with your actual game logic.
         // This logging can be very verbose if updates are frequent.

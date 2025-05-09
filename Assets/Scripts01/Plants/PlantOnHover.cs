@@ -10,7 +10,6 @@ public class PlantOnHover : MonoBehaviour
 
     private Camera camera;
     
-    
     private void Awake()
     {
         plant = GetComponent<Plant>();
