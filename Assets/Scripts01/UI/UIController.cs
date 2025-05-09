@@ -43,6 +43,8 @@ public class UIController : MonoBehaviour
     public Sprite thirdLevelItem;
     public Sprite fourthLevelItem;
 
+    public GameObject mainShopPanel;
+
 
     private void Awake()
     {
@@ -206,6 +208,30 @@ public class UIController : MonoBehaviour
         {
             visitPanel.SetActive(false);
             mainPanel.GetComponent<CanvasGroup>().blocksRaycasts = true;
+        });
+    }
+
+    public void OnMainShopClick()
+    {
+        audioSource.PlayOneShot(buttonSound);
+        mainPanel.GetComponent<CanvasGroup>().blocksRaycasts = false;
+        mainShopPanel.GetComponent<CanvasGroup>().alpha = 0f;
+        mainShopPanel.GetComponent<CanvasGroup>().blocksRaycasts = false;
+        mainShopPanel.SetActive(true);
+        mainShopPanel.GetComponent<CanvasGroup>().DOFade(1f, 0.5f).OnComplete(() =>
+        {
+            mainShopPanel.GetComponent<CanvasGroup>().blocksRaycasts = true;
+        });
+    }
+
+    public void OnMainShopExitClick()
+    {
+        audioSource.PlayOneShot(buttonSound);
+        mainShopPanel.GetComponent<CanvasGroup>().blocksRaycasts = false;
+        mainShopPanel.GetComponent<CanvasGroup>().DOFade(0f, 0.5f).OnComplete(() =>
+        {
+            mainShopPanel.SetActive(false);
+            mainShopPanel.GetComponent<CanvasGroup>().blocksRaycasts = true;
         });
     }
 
