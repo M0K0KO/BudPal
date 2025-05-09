@@ -4,14 +4,20 @@ using System.Collections.Generic;
 using Newtonsoft.Json;
 using System.IO;
 using System.Text;
+using TMPro;
 using UnityEngine;
 using UnityEngine.Networking;
 using UnityEngine.Serialization;
+using UnityEngine.UI;
 
 public class WorldSingleton : MonoBehaviour
 {
     public static WorldSingleton instance;
     public GameObject plantDetailWindow;
+    public GameObject levelUIObj;
+    // 로그인 시 할당
+    public GameObject userNameObj;
+    public Slider expBar;
     public List<Plant> harvestedPlants;
     public SSEObjectReceiver sseReceiver;
 
@@ -38,6 +44,12 @@ public class WorldSingleton : MonoBehaviour
 
     public GameObject userScene;
     public GameObject friendScene;
+    
+    public float baseRequiredExp = 10;
+    public float requiredExp = 10;
+    public float expGrowthRate = 1.3f;
+    public float userExp = 0f;
+    public int userLv = 1;
     
     [FormerlySerializedAs("authUITesterr")] [FormerlySerializedAs("authUITesert")] public AuthUITester authUITester;
     
@@ -68,6 +80,14 @@ public class WorldSingleton : MonoBehaviour
         v2_eggplant = Resources.Load<Sprite>("Crops/v2_eggplant");
         v3_eggplant = Resources.Load<Sprite>("Crops/v3_eggplant");
         v4_eggplant = Resources.Load<Sprite>("Crops/v4_eggplant");
+
+        Debug.Log(userLv.ToString());
+        levelUIObj.GetComponent<TMP_Text>().text = userLv.ToString();
+    }
+
+    private void Update()
+    {
+        expBar.value = (userExp / requiredExp) / 100f;
     }
 
     #region JSONProcessing
@@ -229,6 +249,7 @@ public class WorldSingleton : MonoBehaviour
             return userLv;
         }
 
+        levelUIObj.GetComponent<TMP_Text>().text = userLv.ToString();
         return userLv;
     }
 }
