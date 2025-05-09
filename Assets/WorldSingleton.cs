@@ -197,15 +197,17 @@ public class WorldSingleton : MonoBehaviour
         
         LoadFarmData(allUsers[2].id);
     }
-    
+
     public async void LoadFarmData(string userId)
     {
         // 1. 사용자 ID 설정
         sseReceiver.sseTargetUserId = userId;
-        
+
         // 2. 농장 데이터 요청
         UserDataResponse response = await sseReceiver.RequestCombinedUserDataAsync(userId);
         sseReceiver.UpdateDetectionInfoInUnity(response.detection_data);
+    }
+
     public float baseRequiredExp = 10;
     public float requiredExp = 10;
     public float expGrowthRate = 1.3f;
